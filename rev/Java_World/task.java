@@ -50,7 +50,7 @@ public class task{
         for(i=0;i<9;i++){
             for(j=0;j<8;j++){
                 hidden[i][j] = (int)res.charAt(k++);
-            }
+            } 
         }
         hidden[8][7] += longkey.length();
         //System.out.println(res);
