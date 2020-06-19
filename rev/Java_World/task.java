@@ -35,16 +35,16 @@ public class task{
         int [] tab = new int[LENGTH];
         int [][] hidden = new int[9][8];
         for(i=(LENGTH/2 -1);i>=0;i--){
-            tab[i] = (int)flag.charAt(i) ^ (160 >> (2 & 10));
+            tab[i] = (int)password.charAt(i) ^ (160 >> (2 & 10));
         }   
         for(i=(LENGTH/2);i<LENGTH;i++){
-            x = (int)flag.charAt(i);
+            x = (int)password.charAt(i);
             tab[i] = (x | 4 ) & (~x | (-110 >> 5));
         }
 
         for(j=0,i=(longkey.length()-1);j<LENGTH && i>=0;i--,j++){
             res += i % 4 != 0 ? (char)((int)longkey.charAt(i % 4)  + (int)tab[j] - 100): (char)(((int)tab[j] ^ (int)longkey.charAt(j % 5) ));
-            res += i % 2 == 0 ? longkey.charAt(j % 5) : longkey.charAt(i % 4);
+            res += j % 2 == 0 ? longkey.charAt(j % 5) : longkey.charAt(i % 4);
         }
         int k = 0;
         for(i=0;i<9;i++){
@@ -52,7 +52,8 @@ public class task{
                 hidden[i][j] = (int)res.charAt(k++);
             }
         }
-        System.out.println(res);
+        hidden[8][7] += longkey.length();
+        //System.out.println(res);
         return hidden;
     }
     public static void read_input(String input,int key){
@@ -91,9 +92,10 @@ public class task{
             }
             System.out.println();
         }
-        if((myCollator.compare(longkey , longkey.toUpperCase()))==0){
+        System.out.println("Bye");
+        /*if((myCollator.compare(longkey , longkey.toUpperCase()))==0){
             System.out.println(hidden);
-        }
+        }*/
         //read_input(input,key);
         
     }
