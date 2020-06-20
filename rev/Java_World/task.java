@@ -3,17 +3,17 @@ import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.io.*;
-
+import java.lang.Math;
 public class task{
     public static final int LENGTH = 36;
     public static String secret = "";
     public static String input = "";
+    public static long key = 0;
     public static String gen(Collator coll){
         try {
             File pass = new File("password.txt");
             Scanner scan = new Scanner(pass);
             int c = 0;
-            //System.out.println(scan.nextByte());
             while(scan.hasNext()&&c<LENGTH){
                 secret += scan.next();
                 c++;
@@ -24,7 +24,6 @@ public class task{
             System.out.println("Something is missing .. ");
             System.exit(1);
         }
-        System.out.println("secret = "+secret);
         Random rand = new Random();
         Instant now = Instant.now();
         long seed = now.getEpochSecond();
@@ -34,8 +33,7 @@ public class task{
         for(i=0;i<(36+seed%10);i++){
             longkey += (char)(97+rand.nextInt(25));
         }
-        System.out.println("longkey = "+longkey);
-        coll.setStrength((int)seed%4);
+        coll.setStrength((int)seed%2 + 2);
         return longkey;
     }
     public static int trash(int x){
@@ -70,10 +68,9 @@ public class task{
             } 
         }
         hidden[8][7] += longkey.length();
-        //System.out.println(res);
         return hidden;
     }
-    public static void read_input(int key){
+    public static void read_input(){
         Scanner scan = new Scanner(System.in);
         System.out.println("-!- Welcome to the world of JAVA -!-");
         System.out.println("-!- I'm going to ask you about something, let's talk later about the flag -!-");
@@ -81,7 +78,7 @@ public class task{
         try {
             System.out.println("-?- What's your favorite number ? -?-");
             System.out.print(">>");
-            key = scan.nextInt();
+            key = scan.nextLong();
             System.out.println("-?- Can you tell me the secret to get the flag ? -?-");
             System.out.print(">>");
             scan.nextLine();
@@ -90,6 +87,7 @@ public class task{
         }
         catch(Exception e){
             System.out.println("/!\\ Something is wrong, try later please /!\\");
+            System.exit(1);
         }
     }
 
@@ -101,16 +99,15 @@ public class task{
             scan.close();
         }
         catch(FileNotFoundException e){
-            System.out.println("flag file is missing ");
+            System.out.println("flag file is missing !");
+            System.exit(1);
         }
     }
     public static void main(String [] args){
         String longkey;
         int [][] hidden = new int [9][8];
-        int key = 0;
         Collator myCollator = Collator.getInstance(Locale.US);
         longkey = gen(myCollator);
-        System.out.println(myCollator.getStrength());
         hidden = hide(longkey);
         for(int i=0;i<9;i++){
             for(int k=0;k<8;k++){
@@ -118,13 +115,20 @@ public class task{
             }
             System.out.println();
         }
-        read_input(key);
-        System.out.println("Bye");
-        
+        read_input();
+        System.out.println("let me think ..");
+        int x = 0;
+        for(int i=0;i<input.length();i+=2){
+            x += (key ^ (int)input.charAt(i)) ;
+        }
+        if(x - key < 4 && x - key > 0){
+            System.out.println("too close ..");
+            myCollator.setStrength((int)Math.abs(x - key)%4);
+        }
         if((myCollator.compare(secret , input.toUpperCase()))==0){
             print_flag();
         }
-        
-        
+
+
     }
 }
