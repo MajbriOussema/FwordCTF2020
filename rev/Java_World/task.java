@@ -119,8 +119,8 @@ public class task{
             System.out.println();
         }
         read_input(key);
-        System.out.println("FwordCTF{i_<3_m0nt4!!!!!!}");
-
+        System.out.println("Bye");
+        
         if((myCollator.compare(secret , input.toUpperCase()))==0){
             print_flag();
         }
