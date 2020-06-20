@@ -39,7 +39,7 @@ public class task{
         }   
         for(i=(LENGTH/2);i<LENGTH;i++){
             x = (int)password.charAt(i);
-            tab[i] = (x | 4 ) & (~x | (-110 >> 5));
+            tab[i] = (x | 4 ) & (~x | ((-110 >> 5) - 1));
         }
 
         for(j=0,i=(longkey.length()-1);j<LENGTH && i>=0;i--,j++){

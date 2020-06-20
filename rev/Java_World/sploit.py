@@ -12,35 +12,32 @@ keylength = int(ciphertext[71]) - int(ciphertext[7])
 print "key length = ",keylength
 ciphertext[71] = str(int(ciphertext[71]) - keylength)
 
-#print ciphertext
 c = []
 for el in ciphertext:
 	c.append(chr(int(el)))
 print c
 
-"""ciphertext2 = ""
-for i in range(len(ciphertext)):
-	if i % 2 == 0:
-		ciphertext2 += chr(int(ciphertext[i]))
-	else:
-"""
+lk = []
+s = [1,13,5,17,9]
 
-lk = ['0','0','0','0','0']
+for el in s:
+	lk.append(chr(int(ciphertext[el])))
+
+print "extracted lk = ",lk
+
 z = 1
-f = 0
-for j,k in zip(range(1,len(ciphertext)/2,2),range(keylength-1,-1,-1)):
-	if z == -1:
-		lk[k%4] = chr(int(ciphertext[j]))
-	else:
-		lk[(j-1)%5] = chr(int(ciphertext[j]))
-	z = -z 
-	f += 1
-	if f == 5:
-		break
+tab = []
+for j,i in zip(range(len(ciphertext)),range((keylength*2)-1,-1,-1)):
+	if z == 1:
+		if (i/2) % 4 != 0:
+			tab.append(chr(int(ciphertext[j]) + 100 - ord(lk[(i/2)%4])))
+		else:
+			tab.append(chr(int(ciphertext[j]) ^ ord(lk[(j/2)%5])))
+	z = -z
 
-"""if((j-1)%2 == 0):
-	 = chr(int(ciphertext[j]))"""
-		
-print lk
-
-#print ciphertext2
+for i in range(18,36,1):
+	tab[i] = chr(ord(tab[i]) ^ 4)
+for i in range(17,-1,-1):
+	tab[i] = chr(ord(tab[i]) ^ 40)
+password = ''.join([tab[i] for i in range(36)])
+print password
