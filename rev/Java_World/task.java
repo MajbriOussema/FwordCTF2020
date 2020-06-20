@@ -2,12 +2,29 @@ import java.time.Instant;
 import java.text.*; 
 import java.util.*;
 import java.util.function.*;
-import java.lang.Math;
+import java.io.*;
 
 public class task{
     public static final int LENGTH = 36;
-    public static String password = "FwordCTF{Y_d0es_3veRy_1_h4t3_j4Va_?}";
+    public static String secret = "";
+    public static String input = "";
     public static String gen(Collator coll){
+        try {
+            File pass = new File("password.txt");
+            Scanner scan = new Scanner(pass);
+            int c = 0;
+            //System.out.println(scan.nextByte());
+            while(scan.hasNext()&&c<LENGTH){
+                secret += scan.next();
+                c++;
+            }
+            scan.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("Something is missing .. ");
+            System.exit(1);
+        }
+        System.out.println("secret = "+secret);
         Random rand = new Random();
         Instant now = Instant.now();
         long seed = now.getEpochSecond();
@@ -35,10 +52,10 @@ public class task{
         int [] tab = new int[LENGTH];
         int [][] hidden = new int[9][8];
         for(i=(LENGTH/2 -1);i>=0;i--){
-            tab[i] = (int)password.charAt(i) ^ (160 >> (2 & 10));
+            tab[i] = (int)secret.charAt(i) ^ (160 >> (2 & 10));
         }   
         for(i=(LENGTH/2);i<LENGTH;i++){
-            x = (int)password.charAt(i);
+            x = (int)secret.charAt(i);
             tab[i] = (x | 4 ) & (~x | ((-110 >> 5) - 1));
         }
 
@@ -56,7 +73,7 @@ public class task{
         //System.out.println(res);
         return hidden;
     }
-    public static void read_input(String input,int key){
+    public static void read_input(int key){
         Scanner scan = new Scanner(System.in);
         System.out.println("-!- Welcome to the world of JAVA -!-");
         System.out.println("-!- I'm going to ask you about something, let's talk later about the flag -!-");
@@ -69,22 +86,31 @@ public class task{
             System.out.print(">>");
             scan.nextLine();
             input = scan.nextLine();
+            scan.close();
         }
         catch(Exception e){
             System.out.println("/!\\ Something is wrong, try later please /!\\");
         }
     }
-    public static String reverse(String ciphertext){
-        String plaintext = "";
-        return plaintext;
+
+    public static void print_flag(){
+        try{
+            File flagFile = new File("flag.txt");
+            Scanner scan = new Scanner(flagFile);
+            System.out.println(scan.nextLine());
+            scan.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("flag file is missing ");
+        }
     }
     public static void main(String [] args){
-        String longkey,input = "";
+        String longkey;
         int [][] hidden = new int [9][8];
         int key = 0;
         Collator myCollator = Collator.getInstance(Locale.US);
         longkey = gen(myCollator);
-        //System.out.println(myCollator.getStrength());
+        System.out.println(myCollator.getStrength());
         hidden = hide(longkey);
         for(int i=0;i<9;i++){
             for(int k=0;k<8;k++){
@@ -92,11 +118,13 @@ public class task{
             }
             System.out.println();
         }
-        System.out.println("Bye");
-        /*if((myCollator.compare(longkey , longkey.toUpperCase()))==0){
-            System.out.println(hidden);
-        }*/
-        //read_input(input,key);
+        read_input(key);
+        System.out.println("FwordCTF{i_<3_m0nt4!!!!!!}");
+
+        if((myCollator.compare(secret , input.toUpperCase()))==0){
+            print_flag();
+        }
+        
         
     }
 }
