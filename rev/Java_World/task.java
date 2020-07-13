@@ -1,7 +1,6 @@
 import java.time.Instant;
 import java.text.*; 
 import java.util.*;
-import java.util.function.*;
 import java.io.*;
 import java.lang.Math;
 public class task{
@@ -78,7 +77,7 @@ public class task{
         try {
             System.out.println("-?- What's your favorite number ? -?-");
             System.out.print(">>");
-            key = scan.nextLong();
+            key = scan.nextInt();
             System.out.println("-?- Can you tell me the secret to get the flag ? -?-");
             System.out.print(">>");
             scan.nextLine();
@@ -116,19 +115,19 @@ public class task{
             System.out.println();
         }
         read_input();
-        System.out.println("let me think ..");
         int x = 0;
-        for(int i=0;i<input.length();i+=2){
-            x += (key ^ (int)input.charAt(i)) ;
+        for(int i=0;i<16;i++){
+            x += key ^ (int)secret.charAt(i);
         }
-        if(x - key < 4 && x - key > 0){
-            System.out.println("too close ..");
+        if((x - 1251) == 0){
             myCollator.setStrength((int)Math.abs(x - key)%4);
         }
         if((myCollator.compare(secret , input.toUpperCase()))==0){
             print_flag();
         }
-
+        else {
+            System.out.println("maybe another time ..");
+        }
 
     }
 }
