@@ -1,2 +1,3 @@
-break * 0x0000000000401d71
+break * 0x000000000040120f
+break main
 

@@ -32,11 +32,14 @@ static int seccomp_configuration(int nr,int arch,int error){
         return 1;
     }
 }
+void init(){
+    int l [8] = {57,59,41,49,32,33,292,56};
+    for(int i=0;i<8;i++){
+        seccomp_configuration(l[i], AUDIT_ARCH_X86_64, EPERM);
+    }
+}
 int main(){
-    
+    init();
     char buff[60];
-    gets(buff);
-    seccomp_configuration(__NR_execve, AUDIT_ARCH_X86_64, EPERM);
-    seccomp_configuration(__NR_fork, AUDIT_ARCH_X86_64, EPERM);
-    //execve("/bin/sh",0,0);
+    gets(buff); 
 }
