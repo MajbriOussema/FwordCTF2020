@@ -3,7 +3,7 @@
 #include <string.h>
 
 char buffer[40];
-/*gcc task1.c -o task1 -m32 */
+/*gcc task1.c -o task1 */
 void ignore_me_init_buffering() {
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -66,6 +66,8 @@ int choice(){
 }
 int main(){
 	ignore_me_init_buffering();
+	setresuid(getegid(), getegid(), getegid());
+	setresgid(getegid(), getegid(), getegid());
 	choice();
 	return 0;
 }
