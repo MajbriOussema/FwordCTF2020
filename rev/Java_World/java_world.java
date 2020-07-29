@@ -3,7 +3,7 @@ import java.text.*;
 import java.util.*;
 import java.io.*;
 import java.lang.Math;
-public class task{
+public class java_world{
     public static final int LENGTH = 36;
     public static String secret = "";
     public static String input = "";
@@ -36,7 +36,7 @@ public class task{
         return longkey;
     }
     public static int trash(int x){
-        int i,j;
+        int i;
         String xx = Integer.toBinaryString(x),res="";
         for(i=0;i<xx.length();i++){
             res += xx.charAt(i) == '0' ? '1' : '0';
@@ -115,11 +115,13 @@ public class task{
             System.out.println();
         }
         read_input();
-        int x = 0;
-        for(int i=0;i<16;i++){
-            x += key ^ (int)secret.charAt(i);
+        long x = 0;
+        for(int i=0;i<36;i++){
+            x += key + (int)secret.charAt(i);
         }
-        if((x - 1251) == 0){
+        x = x / 10;
+        x = (long)Math.pow(x, 2);
+        if((x - 665330436) == 0){
             myCollator.setStrength((int)Math.abs(x - key)%4);
         }
         if((myCollator.compare(secret , input.toUpperCase()))==0){
